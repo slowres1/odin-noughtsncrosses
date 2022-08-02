@@ -9,7 +9,8 @@ const gameBoard = (function() {
     const board = document.querySelector('.game-board');
     //displays the board using the current contents
     //removes all children then re-populates
-    function renderBoard() {
+
+    function createBoard() {
         while (board.firstChild) {
             board.removeChild(board.lastChild);
         }
@@ -18,22 +19,38 @@ const gameBoard = (function() {
         }
     }
 
-    function changeContent(location, value) {
-        contents[location] = value;
-    }
-
     function createSquare(num) {
         const square = document.createElement('div');
         square.classList.add('flex');
         square.setAttribute('id', num);
-        square.textContent = contents[num];
         board.appendChild(square);
 
         square.addEventListener('click', () => {
-            changeContent(parseInt(square.id), 'X'),
+            let value;
+            if (input === 1) {value = 'X'
+            } else if (input === 0) {
+                value = '0'
+            } else {
+                value = 'L'
+            };
+            changeContent(parseInt(square.id), value),
             renderBoard();
         }); 
     }
+
+    function renderBoard() {
+        for (let i=0; i<contents.length; i++) {
+            const square = document.getElementById(i);
+            square.textContent = contents[i];
+        }
+    }
+
+    function changeContent(location, value) {
+        contents[location] = value;
+    }
+
+    createBoard();
+    renderBoard();
 
     return {
         //contents: contents,
@@ -42,7 +59,9 @@ const gameBoard = (function() {
     }
 })();
 
-gameBoard.renderBoard();
+const input = 1;
+
+//gameBoard.renderBoard();
 
 
 /*
