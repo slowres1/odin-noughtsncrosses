@@ -19,6 +19,7 @@ h1 {
 
 .container {
     border: 5px solid black;
+    height: 100vh;
 }
 
 .game-board {
@@ -38,3 +39,13 @@ h1 {
 }
 
 /*Buttons*/
+
+/*modals*/
+
+.select-player {
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    border: 1px solid blue;
+    background-color: white;
+}
