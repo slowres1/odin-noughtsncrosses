@@ -1,0 +1,40 @@
+/*global*/
+
+/*Flex Containers*/
+.flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*Variables*/
+
+
+
+h1 {
+    color: red;
+}
+
+/*Main Containers*/
+
+.container {
+    border: 5px solid black;
+}
+
+.game-board {
+    width: 200px;
+    height: 200px;
+    border: 5px solid black;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+}
+
+/*Squares*/
+
+.game-board div {
+    border: 1px solid red;
+    
+}
+
+/*Buttons*/
