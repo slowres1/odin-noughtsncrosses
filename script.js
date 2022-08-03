@@ -6,6 +6,8 @@ const gameBoard = (function() {
     //private array
     let contents = ['','','','','','','','',''];
 
+    let gameOver = false;
+
     //private variable for the board
     const board = document.querySelector('.game-board');
     //displays the board using the current contents
@@ -16,10 +18,11 @@ const gameBoard = (function() {
             board.removeChild(board.lastChild);
         }
         contents = ['','','','','','','','',''];
+        gameOver = false;
         for (let i=0; i<contents.length; i++) {
             createSquare(i);
         }
-        return {contents}
+        return {contents, gameOver}
     }
 
     function createSquare(num) {
@@ -49,6 +52,10 @@ const gameBoard = (function() {
     }
 
     function placeMarker(id) {
+        if (gameOver) {
+            alert('game over man');
+            return;
+        }
         let selection = document.getElementById(parseInt(id));
         if (selection.textContent) {
             alert('Can\'t place that there M\'lord!');
@@ -57,7 +64,10 @@ const gameBoard = (function() {
 
         changeContent(parseInt(id), input);
         renderBoard();
-        checkGameOver();
+        if (checkGameOver()) {
+            console.log(`Player ${contents[parseInt(id)]} wins!`);
+            return gameOver = true;
+        }
 
         if (input === 'X') {
             return input = '0';
@@ -70,13 +80,48 @@ const gameBoard = (function() {
     }
 
     function checkGameOver() {
-        console.log(contents);
-
-        if (contents.every((value) => value != '')) {console.log('Game Over')};
-
+        //console.log(contents);
+        let victory;
         //victory conditions
         //horizontal
+        for (let i=0; i<contents.length; i++) {
+            if ((i === 0 || i === 3 || i === 6) && contents[i]) {
+                victory = checkHorizontal(contents,i);
+                if (victory) {
+                    return true
+                    
+                }
+            } 
+            
+            if ((i === 0 || i === 1 || i === 2) && contents[i]) {
+                victory = checkVertical(contents,i);
+                if (victory) console.log(`Player ${contents[i]} wins!`);
+            };
+
+            //console.log(victory);
+        }
         
+
+
+        //tie
+        if (contents.every((value) => value != '')) {console.log('Game Over')};
+
+        
+        
+    }
+
+    function checkHorizontal(array,pos) {
+        console.log(array[pos], array[pos+1], array[pos+2]);
+        if (array[pos] === array[pos+1] && array[pos] === array[pos+2]) {
+            return true;
+        } else return false;
+    } 
+
+    function checkVertical(array,pos) {
+        console.log(array[pos], array[pos+3], array[pos+6]);
+        if (array[pos] === array[pos+3] && array[pos] === array[pos+6]) {
+            return true;
+        } else return false;
     }
 
     createBoard();
@@ -86,7 +131,8 @@ const gameBoard = (function() {
         //contents: contents,
         createBoard: createBoard,
         renderBoard: renderBoard,
-        changeContent: changeContent
+        changeContent: changeContent,
+        gameOver: gameOver
     }
 })();
 
