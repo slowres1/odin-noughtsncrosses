@@ -1,4 +1,4 @@
-const container = document.querySelector('.container');
+const container = document.querySelector('.main');
 let input = 'X';
 
 //game board module function.
@@ -53,7 +53,7 @@ const gameBoard = (function() {
 
     function placeMarker(id) {
         if (gameOver) {
-            alert('game over man');
+            alert('Game over. Press "Reset" to play again.');
             return;
         }
         let selection = document.getElementById(parseInt(id));
@@ -65,7 +65,7 @@ const gameBoard = (function() {
         changeContent(parseInt(id), input);
         renderBoard();
         if (checkGameOver()) {
-            console.log(`Player ${contents[parseInt(id)]} wins!`);
+            alert(`Player ${contents[parseInt(id)]} wins!`);
             return gameOver = true;
         }
 
@@ -88,23 +88,33 @@ const gameBoard = (function() {
             if ((i === 0 || i === 3 || i === 6) && contents[i]) {
                 victory = checkHorizontal(contents,i);
                 if (victory) {
-                    return true
-                    
+                    return [true, contents[i]];
                 }
-            } 
+            };
             
             if ((i === 0 || i === 1 || i === 2) && contents[i]) {
                 victory = checkVertical(contents,i);
-                if (victory) console.log(`Player ${contents[i]} wins!`);
+                if (victory) {
+                    return [true, contents[i]];
+                }
+                //if (victory) console.log(`Player ${contents[i]} wins!`);
             };
+
+            if (i === 4 && contents[i]) {
+                victory = checkDiagonal(contents,i);
+                if (victory) {
+                    return [true, contents[i]];
+                }
+                //if (victory) console.log(`Player ${contents[i]} wins!`);
+            }
 
             //console.log(victory);
         }
+
         
-
-
+        
         //tie
-        if (contents.every((value) => value != '')) {console.log('Game Over')};
+        if (contents.every((value) => value != '')) {alert('Game Over. It\'s a tie!')};
 
         
         
@@ -120,6 +130,12 @@ const gameBoard = (function() {
     function checkVertical(array,pos) {
         console.log(array[pos], array[pos+3], array[pos+6]);
         if (array[pos] === array[pos+3] && array[pos] === array[pos+6]) {
+            return true;
+        } else return false;
+    }
+
+    function checkDiagonal(array) {
+        if ((array[0] === array[4] && array[0] === array[8]) || (array[2] === array[4] && array[2] === array[6])) {
             return true;
         } else return false;
     }
@@ -147,13 +163,13 @@ const buttonFunctions = (function() {
 
     function selectPlayer() {
         const box = document.createElement('div');
-        box.classList.add('select-player');
+        box.classList.add('select-player','modal');
 
-        const message = document.createElement('h1');
-        message.textContent = 'Noughts and Crosses. Choose Player to start.';
+        const message = document.createElement('h2');
+        message.textContent = 'Choose Player to start.';
         
         const exitButton = createSelectButton(box, 'exit');
-        const playerXButton = createSelectButton(box, 'player-x');
+        const playerXButton = createSelectButton(box, 'player-X');
         const player0Button = createSelectButton(box, 'player-0');
 
         box.appendChild(message);
@@ -174,7 +190,7 @@ const buttonFunctions = (function() {
             button.addEventListener('click', () => {
                 container.removeChild(box);
             });
-        } else if (btnClass === 'player-x') {
+        } else if (btnClass === 'player-X') {
             name = 'X';
             button.addEventListener('click', () => {
                 gameBoard.createBoard();

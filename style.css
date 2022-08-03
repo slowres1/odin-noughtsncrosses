@@ -8,24 +8,36 @@
 }
 
 /*Variables*/
-
-
-
-h1 {
-    color: red;
+:root {
+    --grey: #e0e0e0;
+    --red: #f72d2d;
+    font-size: 16px;
 }
+
+
+
 
 /*Main Containers*/
 
 .container {
-    border: 5px solid black;
+    display: grid;
     height: 100vh;
+    grid-template-rows: 1fr 6fr 1fr;
+}
+
+.header {
+    background-color: var(--grey);
+}
+
+.main {
+    flex-direction: column;
+    gap: 2rem;
 }
 
 .game-board {
     width: 200px;
     height: 200px;
-    border: 5px solid black;
+    border: 1px solid red;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
@@ -35,17 +47,60 @@ h1 {
 
 .game-board div {
     border: 1px solid red;
-    
+    font-size: 2rem;
 }
 
-/*Buttons*/
+/*Buttons and text*/
+
+h1,
+h2,
+h3 {
+    color: var(--red)
+}
+
+.btn {
+    font-size: 2rem;
+}
+
+
 
 /*modals*/
 
-.select-player {
+.modal {
     position: fixed;
     width: 300px;
-    height: 300px;
     border: 1px solid blue;
     background-color: white;
+    padding: 1rem;
+    gap: 0.5rem;
+}
+
+/*select-player modal*/
+
+.select-player {
+    display: grid;
+    grid-template-rows: 0.5fr 2fr 2fr;
+    grid-template-columns: 1fr 1fr;
+}
+
+.select-player .exit {
+    grid-area: 1/1/2/2;
+    font-size: 1rem;
+    margin: 0rem 1rem 1rem 0rem;
+    
+}
+
+.select-player h2 {
+    grid-area: 2/1/3/3;
+    font-size: 1.4rem;
+}
+
+.select-player .player-X {
+    grid-area: 3/1/4/2;
+    font-size: 3rem;
+}
+
+.select-player .player-0 {
+    grid-area: 3/2/4/3;
+    font-size: 3rem;
 }
