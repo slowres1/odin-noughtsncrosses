@@ -4,7 +4,7 @@ let input = 'X';
 //game board module function.
 const gameBoard = (function() {
     //private array
-    const contents = ['','','','','','','','',''];
+    let contents = ['','','','','','','','',''];
 
     //private variable for the board
     const board = document.querySelector('.game-board');
@@ -15,9 +15,11 @@ const gameBoard = (function() {
         while (board.firstChild) {
             board.removeChild(board.lastChild);
         }
+        contents = ['','','','','','','','',''];
         for (let i=0; i<contents.length; i++) {
             createSquare(i);
         }
+        return {contents}
     }
 
     function createSquare(num) {
@@ -28,9 +30,10 @@ const gameBoard = (function() {
         
         //adds on-click functionality to change the square contents.
         square.addEventListener('click', () => {
-            //will need to come back to this so they can't change current contents.
-            changeContent(parseInt(square.id), input),
-            renderBoard();
+            
+            placeMarker(square.id);
+            //changeContent(parseInt(square.id), input),
+            //renderBoard();
         }); 
     }
 
@@ -45,22 +48,17 @@ const gameBoard = (function() {
         contents[location] = value;
     }
 
-    createBoard();
-    renderBoard();
+    function placeMarker(id) {
+        let selection = document.getElementById(parseInt(id));
+        if (selection.textContent) {
+            alert('Can\'t place that there M\'lord!');
+            return;
+        }
 
-    return {
-        //contents: contents,
-        renderBoard: renderBoard,
-        changeContent: changeContent
-    }
-})();
+        changeContent(parseInt(id), input);
+        renderBoard();
+        checkGameOver();
 
-const buttonFunctions = (function() {
-    const changePlayer = document.querySelector('.toggle-player');
-    
-    const reset = document.querySelector('.reset');
-    
-    changePlayer.addEventListener('click', () => {
         if (input === 'X') {
             return input = '0';
         } else if (input === '0') {
@@ -68,7 +66,34 @@ const buttonFunctions = (function() {
         } else {
             console.log('error');
         };
-    });
+
+    }
+
+    function checkGameOver() {
+        console.log(contents);
+
+        if (contents.every((value) => value != '')) {console.log('Game Over')};
+
+        //victory conditions
+        //horizontal
+        
+    }
+
+    createBoard();
+    renderBoard();
+
+    return {
+        //contents: contents,
+        createBoard: createBoard,
+        renderBoard: renderBoard,
+        changeContent: changeContent
+    }
+})();
+
+const buttonFunctions = (function() {
+    //const changePlayer = document.querySelector('.toggle-player');
+    
+    const reset = document.querySelector('.reset');
 
     reset.addEventListener('click', () => {
         selectPlayer();
@@ -78,29 +103,25 @@ const buttonFunctions = (function() {
         const box = document.createElement('div');
         box.classList.add('select-player');
 
-        /*const playerX = document.createElement('button');
-        playerX.classList.add('btn','player-x');
-        playerX.textContent = 'X';
-
-        const player0 = document.createElement('button');
-
-        const exitButton = document.createElement('button');
-        exitButton.classList.add('btn', 'exit-modal');
-        exitButton.textContent = 'Exit';
-        exitButton.addEventListener('click', () => {
-            container.removeChild(box);
-        })
+        const message = document.createElement('h1');
+        message.textContent = 'Noughts and Crosses. Choose Player to start.';
         
-        */
         const exitButton = createSelectButton(box, 'exit');
+        const playerXButton = createSelectButton(box, 'player-x');
+        const player0Button = createSelectButton(box, 'player-0');
 
+        box.appendChild(message);
         box.appendChild(exitButton);
+        box.appendChild(playerXButton);
+        box.appendChild(player0Button);
+        
         container.appendChild(box);
     }
     
     function createSelectButton(box, btnClass) {
         const button = document.createElement('button');
         button.classList.add('btn', btnClass);
+
         let name;
         if (btnClass === 'exit') {
             name = 'Exit';
@@ -110,24 +131,44 @@ const buttonFunctions = (function() {
         } else if (btnClass === 'player-x') {
             name = 'X';
             button.addEventListener('click', () => {
+                gameBoard.createBoard();
+                input = 'X';
                 container.removeChild(box);
             });
         } else if (btnClass === 'player-0') {
             name = '0';
+            button.addEventListener('click', () => {
+                gameBoard.createBoard();
+                input = '0';
+                container.removeChild(box);
+            });
         };
+
         button.textContent = name;
-
         return button;
-
     }
-
-
 
     return {
-        changePlayer,
-        reset
+        reset,
+        selectPlayer
     }
+
 })();
+
+buttonFunctions.selectPlayer();
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
